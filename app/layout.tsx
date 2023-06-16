@@ -1,9 +1,10 @@
 import { ClientOnly } from './components/ClientOnly'
 import { RegisterModal } from './components/modals/RegisterModal'
+import { LoginModal } from './components/modals/LoginModal'
 import { Navbar } from './components/navbar/Navbar'
+import { ToasterProvider } from './providers/ToasterProvider'
 import { Nunito } from 'next/font/google'
 import './globals.css'
-import { ToasterProvider } from './providers/ToasterProvider'
 
 export const metadata = {
   title: 'Airbnb',
@@ -24,6 +25,7 @@ export default function RootLayout({
         <ClientOnly>
           <ToasterProvider/>
           <RegisterModal />
+          <LoginModal />
           <Navbar/>
         </ClientOnly>
         {children}
