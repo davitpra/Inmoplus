@@ -11,6 +11,7 @@ import { FcGoogle } from "react-icons/fc"
 import { Input } from "../inputs/Input"
 import { toast } from "react-hot-toast"
 import { Button } from "../Button"
+import {signIn } from "next-auth/react"
 
 
 export const RegisterModal = () => {
@@ -100,7 +101,7 @@ export const RegisterModal = () => {
                 outline
                 label = "Continue with GitHub"
                 icon={AiFillGithub}
-                onClick= {()=>{}}
+                onClick= {()=>{ signIn ('github') }}
             />
             <div
                 className="justify-center flex flex-row items-center gap-2"
