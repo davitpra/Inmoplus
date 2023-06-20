@@ -20,6 +20,7 @@ export const LoginModal = () => {
     //  use global state of register and login Modal
     const registerModal = useRegisterModal ()
     const loginModal = useLoginModal ()
+
     const [isLoading, setIsLoading] = useState(false)
 
     //manage the navegation
@@ -67,6 +68,13 @@ export const LoginModal = () => {
 
     }
 
+    // function to change to register modal
+    const toggle = useCallback(()=>{
+        loginModal.onClose()
+        registerModal.onOpen()
+    }
+    ,[loginModal, registerModal])
+
     const bodyContent = (
         <div className="flex flex-col gap-4">
              <Heading 
@@ -112,17 +120,17 @@ export const LoginModal = () => {
                 className="justify-center flex flex-row items-center gap-2"
             >
                 <div>
-                    Already have an account?
+                    Fist time using Airbnb?
                 </div>
                 <div
-                    onClick={registerModal.onClose}
+                    onClick={toggle}
                     className="
                         text-neutral-800
                         cursor-pointer
                         hover:underline
                     "
                 >
-                    Log in
+                    Create an account
                 </div>
             </div>
         </div>
