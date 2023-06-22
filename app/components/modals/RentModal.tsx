@@ -11,6 +11,7 @@ import { CountrySelect } from "../inputs/CountrySelect"
 import dynamic from "next/dynamic"
 import { Counter } from '../inputs/Counter'
 import { ImageUpload } from '../inputs/ImageUpload'
+import { Input } from '../inputs/Input'
 
 // diferents steps of the proces.
 enum STEPS {
@@ -26,6 +27,7 @@ export const RentModal = () => {
     // use de store of RentModal
     const rentModal = useRentModal()
 
+    const [isLoading, setIsLoading] = useState(false);
     const [step, setStep] = useState(STEPS.CATEGORY)
 
     const {
@@ -203,6 +205,37 @@ export const RentModal = () => {
                 <ImageUpload
                     onChange={(value) => setCustomValue('imageSrc', value)}
                     value={imageSrc}
+                />
+            </div>
+        )
+    }
+
+    // body Content for STEP 5: DESCRIPTION 
+    if (step === STEPS.DESCRIPTION) {
+        bodyContent = (
+            <div
+                className=" flex flex-col gap-8"
+            >
+                <Heading 
+                    title="How would you describe your place?"
+                    subtitle="Short and sweet works best!"
+                />
+                <Input 
+                     id="title"
+                     label="Title"
+                     disabled={isLoading}
+                     register={register}
+                     errors={errors}
+                     required 
+                />
+                <hr />
+                <Input
+                  id="description"
+                  label="Description"
+                  disabled={isLoading}
+                  register={register}
+                  errors={errors}
+                  required
                 />
             </div>
         )
