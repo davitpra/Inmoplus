@@ -30,7 +30,7 @@ export const UserMenu:React.FC<UserMenuProps> = ({currentUser}) => {
     const onRent = useCallback (()=> {
         // if its not user its open de login 
         if (!currentUser){
-            return loginModal.onOpen
+            return loginModal.onOpen()
         }
         // Open rent modal
         rentModal.onOpen()

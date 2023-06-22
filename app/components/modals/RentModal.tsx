@@ -1,5 +1,5 @@
 'use client'
-
+import type React from 'react'
 import { useMemo, useState } from "react"
 import { FieldValues, useForm } from "react-hook-form"
 import { Modal } from "./Modal"
@@ -7,7 +7,8 @@ import { Heading } from "../Heading"
 import { useRentModal } from "@/app/hooks/useRentModal"
 import { categories } from "../navbar/Categories"
 import { CategoryInput } from "../inputs/CategoryInput"
-import { isTemplateSpan } from "typescript"
+import { CountrySelect } from "../inputs/CountrySelect"
+import dynamic from "next/dynamic"
 
 // diferents steps of the proces.
 enum STEPS {
@@ -48,16 +49,29 @@ export const RentModal = () => {
         }
     })
 
-    // a tracking of the category from ReactForm
+    // a tracking of the value from ReactForm
+    const location = watch('location')
     const category = watch('category')
-    // a modification of setValue to dont re-render de pag
-    const setCustumeValue = (id: string, value: any)=>{
-        setValue(id, value, {
-            shouldValidate:true,
-            shouldDirty: true,
-            shouldTouch:true,
+
+    // especial import for Map Component for solution a render problem
+    const Map = useMemo (() => {
+        // created to disable the warning. 
+        let domiVariable = location
+        // dinamic import of map without tipe error
+        return dynamic( () => import ('../Map').then((module) => module.Map), {
+        // to dont use Server Side Render
+        ssr:false
         })
-    }
+    }, [location])
+
+    // a modification of setValue to dont re-render de pag
+    const setCustomValue = (id: string, value: any) => {
+        setValue(id, value, {
+          shouldDirty: true,
+          shouldTouch: true,
+          shouldValidate: true
+        })
+      }
     // logic to navegate into the process
     const onBack = ()=>{
         setStep((value) => value - 1)
@@ -82,7 +96,8 @@ export const RentModal = () => {
         return 'Back'
     },[step])
 
-    const bodyContent = (
+    // body Content for STEP 1: categories
+    let bodyContent = (
         <div className="felx flex-col gap-8">
             <Heading 
                 title="Which of these best describe your place?"
@@ -102,7 +117,7 @@ export const RentModal = () => {
                     <div key={item.label} className="col-span-1">
                         <CategoryInput 
                             onClick = {(category)=>{
-                                setCustumeValue('category', category)
+                                setCustomValue('category', category)
                             }}
                             selected={category===item.label}
                             label={item.label}
@@ -115,11 +130,31 @@ export const RentModal = () => {
         </div>
     )
 
+    // body Content for STEP 2: location
+    if (step === STEPS.LOCATION) {
+        //NOTA PERSONAL! Davidcito, location es null, por eso no funciona el map
+        bodyContent = (
+            <div
+                className=" flex flex-col gap-8"
+            >
+                <Heading 
+                    title=" Where is your place located?"
+                    subtitle="Help guest find you!"
+                />
+                <CountrySelect 
+                    value={location}
+                    onChange={(value) => setCustomValue("localtion", value)}
+                />
+                <Map center= {location?.latlng} />
+            </div>
+        )
+    }
+
   return (
     <Modal
         isOpen = {rentModal.isOpen}
         onClose = {rentModal.onClose}
-        onSubmit={rentModal.onClose}
+        onSubmit={onNext}
         actionLabel= {actionLabel}
         sencondaryActionLabel={secondaryActionLabel}
         sencondaryAction={step ===STEPS.CATEGORY ? undefined : onBack}
