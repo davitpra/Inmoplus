@@ -1,17 +1,25 @@
 'use client'
-import type React from 'react'
+
+import axios from 'axios'
+import { toast } from 'react-hot-toast';
+
+import { useRouter } from 'next/navigation';
 import { useMemo, useState } from "react"
-import { FieldValues, useForm } from "react-hook-form"
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
+
+import { useRentModal } from "@/app/hooks/useRentModal"
+
 import { Modal } from "./Modal"
 import { Heading } from "../Heading"
-import { useRentModal } from "@/app/hooks/useRentModal"
 import { categories } from "../navbar/Categories"
+
 import { CategoryInput } from "../inputs/CategoryInput"
+import { Input } from '../inputs/Input'
 import { CountrySelect } from "../inputs/CountrySelect"
-import dynamic from "next/dynamic"
 import { Counter } from '../inputs/Counter'
 import { ImageUpload } from '../inputs/ImageUpload'
-import { Input } from '../inputs/Input'
+
+import dynamic from "next/dynamic"
 
 // diferents steps of the proces.
 enum STEPS {
@@ -24,6 +32,8 @@ enum STEPS {
 }
 
 export const RentModal = () => {
+
+    const router = useRouter()
     // use de store of RentModal
     const rentModal = useRentModal()
 
@@ -89,7 +99,7 @@ export const RentModal = () => {
         setStep((value)=> value + 1)
     }
 
-    // labes of the accion boton
+    // Bottons to go next and back on Modal
     const actionLabel = useMemo(()=>{
         if(step=== STEPS.PRICE){
             return 'Create'
@@ -103,6 +113,32 @@ export const RentModal = () => {
         }
         return 'Back'
     },[step])
+
+    //On submit function to post the data on DB
+    const onSubmit: SubmitHandler <FieldValues> = (data) => {
+        //check if it is in the last sept. 
+        if (step !== STEPS.PRICE) {
+          return onNext();
+        }
+        
+        setIsLoading(true);
+        
+        //posting form on api listings
+        axios.post('/api/listings', data)
+        .then(() => {
+          toast.success('Listing created!');
+          router.refresh();
+          reset();
+          setStep(STEPS.CATEGORY)
+          rentModal.onClose();
+        })
+        .catch(() => {
+          toast.error('Something went wrong.');
+        })
+        .finally(() => {
+          setIsLoading(false);
+        })
+      }
 
     // body Content for STEP 1: categories
     let bodyContent = (
@@ -151,7 +187,7 @@ export const RentModal = () => {
                 />
                 <CountrySelect 
                     value={location}
-                    onChange={(value) => setCustomValue("localtion", value)}
+                    onChange={(value) => setCustomValue("location", value)}
                 />
                 <Map center= {location?.latlng} />
             </div>
@@ -241,11 +277,33 @@ export const RentModal = () => {
         )
     }
 
+    // body Content for STEP 6: PRICE 
+    if (step === STEPS.PRICE) {
+        bodyContent = (
+          <div className="flex flex-col gap-8">
+            <Heading
+              title="Now, set your price"
+              subtitle="How much do you charge per night?"
+            />
+            <Input
+              id="price"
+              label="Price"
+              formatPrice 
+              type="number" 
+              disabled={isLoading}
+              register={register}
+              errors={errors}
+              required
+            />
+          </div>
+        )
+      }
+
   return (
     <Modal
         isOpen = {rentModal.isOpen}
         onClose = {rentModal.onClose}
-        onSubmit={onNext}
+        onSubmit={handleSubmit(onSubmit)}
         actionLabel= {actionLabel}
         sencondaryActionLabel={secondaryActionLabel}
         sencondaryAction={step ===STEPS.CATEGORY ? undefined : onBack}

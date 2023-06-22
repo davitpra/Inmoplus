@@ -29,7 +29,7 @@ export const CountrySelect: React.FC<CountrySelectProps> = ({
         placeholder="Anywhere"
         isClearable
         options={getAll()}
-        // value={value}
+        value={value}
         onChange={() => onChange(value as CountrySelectValue)}
         formatOptionLabel={(option: any) => (
           <div className=" flex flex-row items-center gap-3">
