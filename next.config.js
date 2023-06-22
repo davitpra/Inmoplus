@@ -3,10 +3,15 @@ const nextConfig = {
   experimental: {
     appDir: true,
   },
+  //domains who are allow to upload images on this app. 
   images: {
     domains: [
+      //from github account
       "avatars.githubusercontent.com",
-      "lh3.googleusercontent.com"
+      //from google account 
+      "lh3.googleusercontent.com",
+      //cloudinary
+      "res.cloudinary.com"
     ]
   }
 }
