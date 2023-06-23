@@ -38,6 +38,7 @@ export const RentModal = () => {
     const rentModal = useRentModal()
 
     const [isLoading, setIsLoading] = useState(false);
+    //to know in which step of the process are
     const [step, setStep] = useState(STEPS.CATEGORY)
 
     const {
@@ -69,7 +70,7 @@ export const RentModal = () => {
     const guestCount = watch('guestCount');
     const roomCount = watch('roomCount');
     const bathroomCount = watch('bathroomCount');
-    const imageSrc  = watch('imageSrc ');
+    const imageSrc  = watch('imageSrc');
 
     // especial import for Map Component for solution a render problem
     const Map = useMemo (() => {
@@ -176,7 +177,6 @@ export const RentModal = () => {
 
     // body Content for STEP 2: location
     if (step === STEPS.LOCATION) {
-        //NOTA PERSONAL! Davidcito, location es null, por eso no funciona el map
         bodyContent = (
             <div
                 className=" flex flex-col gap-8"
@@ -239,8 +239,8 @@ export const RentModal = () => {
                     subtitle="Show guests what your place looks like!"
                 />
                 <ImageUpload
-                    onChange={(value) => setCustomValue('imageSrc', value)}
                     value={imageSrc}
+                    onChange={(value) => setCustomValue("imageSrc", value)}
                 />
             </div>
         )

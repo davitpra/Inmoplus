@@ -1,6 +1,7 @@
 'use client'
 
 import Image from "next/image"
+import type { MouseEventHandler } from "react"
 import { CldUploadWidget } from "next-cloudinary"
 import { useCallback } from "react"
 import { TbPhotoPlus } from 'react-icons/tb'
@@ -28,6 +29,7 @@ export const ImageUpload:React.FC <ImageUploadProps>= ({
         onChange(result.info.secure_url)
     },[onChange] )
 
+    console.log(value)
   return (
     <CldUploadWidget
         onUpload={handleUpload} 
@@ -37,9 +39,13 @@ export const ImageUpload:React.FC <ImageUploadProps>= ({
         }}
     >
     {({ open }) => {
+      const handleOnClick: MouseEventHandler<HTMLDivElement>= (e)=> {
+        e.preventDefault()
+        open?.()
+      }
         return (
           <div
-            onClick={() => open?.()}
+            onClick={handleOnClick}
             className="
               relative
               cursor-pointer
@@ -63,12 +69,12 @@ export const ImageUpload:React.FC <ImageUploadProps>= ({
             </div>
             {/* when you upload a image */}
             {value && (
-              <div className="absolute inset-0 w-full h-full">
+              <div className="absolute inset-0 w-full h-full z-3">
                 <Image
+                  alt="Upload" 
                   fill 
                   style={{ objectFit: 'cover' }} 
                   src={value} 
-                  alt="House" 
                 />
               </div>
             )}
