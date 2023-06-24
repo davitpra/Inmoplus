@@ -1,19 +1,18 @@
 'use client'
 
-import { Listing, Reservation } from "@prisma/client"
 import { useRouter } from "next/navigation";
-import { useCountries } from "../hooks/useCountries";
-import { SafeUser } from "../types";
+import { useCountries } from "../../hooks/useCountries";
+import { SafeListing, SafeReservation, SafeUser } from "../../types";
 import { useCallback, useMemo } from "react";
 import { format } from 'date-fns';
 import Image from "next/image";
-import { Button } from "../components/Button";
-import { HeartButton } from "../components/HeartButton";
+import { Button } from "../Button";
+import { HeartButton } from "../HeartButton";
 
 
 interface ListingCardProps {
-    data: Listing
-    reservation?:Reservation
+    data: SafeListing
+    reservation?:SafeReservation
     onAction?: (id: string) => void
     disabled?: boolean
     actionLabel?: string
@@ -91,6 +90,7 @@ export const ListingCard: React.FC<ListingCardProps> = ({
         >
           <Image
             fill
+            priority
             className="
               object-cover 
               h-full 

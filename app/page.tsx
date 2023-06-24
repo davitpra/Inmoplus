@@ -3,7 +3,7 @@ import getListings from "./actions/getListings"
 import { ClientOnly } from "./components/ClientOnly"
 import { EmptyState } from "./components/EmptyState"
 import { Container } from "./components/Container"
-import { ListingCard } from "./listings/ListingCard"
+import { ListingCard } from "./components/listings/ListingCard"
 import { getCurrentUser } from "./actions/getCurrentUser"
 
 export default async function Home() {

@@ -83,13 +83,14 @@ export default async function getListings(
           createAt: 'desc'
         }
       });
-  
+      // in onder to pass this props to client components, date should be a string.
       const safeListings = listings.map((listing) => ({
         ...listing,
         createAt: listing.createAt.toISOString(),
       }));
   
       return safeListings;
+      
     } catch (error: any) {
       throw new Error(error);
     }
