@@ -16,7 +16,7 @@ export const HeartButton: React.FC<HeartButtonProps> = ({
   currentUser
 }) => {
     
- // manage the store of favorte places.
+ // know if it is a favorte place and function to chage it
   const { hasFavorited, toggleFavorite } = useFavorite({
     listingId,
     currentUser
