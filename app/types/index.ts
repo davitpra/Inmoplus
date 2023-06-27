@@ -3,17 +3,17 @@ import { Listing, Reservation, User } from "@prisma/client";
 // create a type similar to Listing and change createAt to a string.
 export type SafeListing = Omit<
 Listing, 
-"createdAt"
+"createAt"
 > & {
-  createdAt: string;
+  createAt: string;
 };
 
 // create a type similar to SafeReservation and change listing into safelisting
 export type SafeReservation = Omit<
   Reservation, 
-  "createdAt" | "startDate" | "endDate" | "listing"
+  "createAt" | "startDate" | "endDate" | "listing"
 > & {
-  createdAt: string;
+  createAt: string;
   startDate: string;
   endDate: string;
   listing: SafeListing;
@@ -25,6 +25,6 @@ User,
  "createdAt" | "updateAt" | "emailVerified" 
 > & {
     createdAt: string,
-    updatedAt:string,
+    updateAt:string,
     emailVerified:string | null
 }
