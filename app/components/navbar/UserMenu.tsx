@@ -11,12 +11,14 @@ import { MenuItem } from "./MenuItem"
 import { useRegisterModal } from "../../hooks/useRegisterModal"
 import { useLoginModal } from "@/app/hooks/useLoginModal"
 import { useRentModal } from "@/app/hooks/useRentModal"
+import { useRouter } from "next/navigation"
 
 interface UserMenuProps {
     currentUser?: SafeUser | null
 }
 
 export const UserMenu:React.FC<UserMenuProps> = ({currentUser}) => {
+    const router = useRouter()
     const registerModal = useRegisterModal()
     const loginModal = useLoginModal()
     const rentModal = useRentModal()
@@ -67,7 +69,7 @@ export const UserMenu:React.FC<UserMenuProps> = ({currentUser}) => {
                     //Menu session active
                     <>
                     <MenuItem 
-                        onclick={()=>{}} 
+                        onclick={()=>router.push("/trips")} 
                         label="My trips"
                     />
                     <MenuItem 
