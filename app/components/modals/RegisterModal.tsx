@@ -46,8 +46,10 @@ export const RegisterModal = () => {
         //post the data on the data base 
         axios.post('/api/register', data)
             .then (()=> {
-                //close the register modal
+                //close the register modal and open login
+                toast.success('Sucess')
                 registerModal.onClose()
+                loginModal.onOpen()
             })
             .catch ((error)=>{
                 toast.error('Something went wrong')
