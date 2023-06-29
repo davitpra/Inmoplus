@@ -28,54 +28,58 @@ export default async function getListings(
   
       let query: any = {};
   
+      // CONVINATIONS TO MODIFY QUERY WITH PARAMS
       if (userId) {
         query.userId = userId;
       }
-  
-      // if (category) {
-      //   query.category = category;
-      // }
-  
-      // if (roomCount) {
-      //   query.roomCount = {
-      //     gte: +roomCount
-      //   }
-      // }
-  
-      // if (guestCount) {
-      //   query.guestCount = {
-      //     gte: +guestCount
-      //   }
-      // }
-  
-      // if (bathroomCount) {
-      //   query.bathroomCount = {
-      //     gte: +bathroomCount
-      //   }
-      // }
-  
-      // if (locationValue) {
-      //   query.locationValue = locationValue;
-      // }
-  
-      // if (startDate && endDate) {
-      //   query.NOT = {
-      //     reservations: {
-      //       some: {
-      //         OR: [
-      //           {
-      //             endDate: { gte: startDate },
-      //             startDate: { lte: startDate }
-      //           },
-      //           {
-      //             startDate: { lte: endDate },
-      //             endDate: { gte: endDate }
-      //           }
-      //         ]
-      //       }
-      //     }
-      //   }
-      // }
+      
+      if (category) {
+        query.category = category;
+      }
+
+      if (locationValue) {
+        query.locationValue = locationValue;
+      }
+
+      // "+" is used to pass a number
+      // gte means greater than o equal to:
+      if (roomCount) {
+        query.roomCount = {
+          gte: +roomCount
+        }
+      }
+      if (guestCount) {
+        query.guestCount = {
+          gte: +guestCount
+        }
+      }
+      if (bathroomCount) {
+        query.bathroomCount = {
+          gte: +bathroomCount
+        }
+      }
+
+      // filter to reservation. 
+      if (startDate && endDate) {
+        // query that not have 
+        query.NOT = {
+          reservations: {
+            some: {
+              // we going to filter out any who has between this days.
+                OR: [
+                  {
+                    endDate: { gte: startDate },
+                    startDate: { lte: startDate }
+                  },
+                  {
+                    startDate: { lte: endDate },
+                    endDate: { gte: endDate }
+                  }
+                ]
+            }
+          }
+        }
+      }
   
       const listings = await prisma.listing.findMany({
         where: query,
