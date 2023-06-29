@@ -81,7 +81,7 @@ export const UserMenu:React.FC<UserMenuProps> = ({currentUser}) => {
                         label="My reservations"
                     />
                     <MenuItem 
-                        onclick={()=>{}} 
+                        onclick={()=>router.push("/properties")} 
                         label="My properties"
                     />
                     <MenuItem 
